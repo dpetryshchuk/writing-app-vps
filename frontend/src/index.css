@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark background */
+html, body, #root {
+  background: #0f0f0f;
+  color: #ccc;
+  height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Milkdown dark overrides */
+.milkdown {
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+.milkdown .editor {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #ccc;
+  background: transparent;
+  padding: 28px 40px;
+  min-height: 100%;
+  outline: none;
+}
+.milkdown .editor h1,
+.milkdown .editor h2,
+.milkdown .editor h3 {
+  color: #fff;
+}
+.milkdown .editor a { color: #7ea; }
+.milkdown .editor code { background: #1e1e1e; padding: 2px 5px; border-radius: 3px; font-size: 13px; }
+.milkdown .editor pre { background: #1a1a1a; border-radius: 6px; padding: 14px 18px; }
+.milkdown .editor blockquote {
+  border-left: 3px solid #333;
+  margin-left: 0;
+  padding-left: 16px;
+  color: #777;
+}
