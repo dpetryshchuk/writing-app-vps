@@ -17,7 +17,8 @@ function gitPush(message) {
   try {
     execSync(`git commit -m ${JSON.stringify(message)}`, { cwd: repoDir(), encoding: 'utf8' })
   } catch (e) {
-    if (e.stdout && e.stdout.includes('nothing to commit')) {
+    const out = (e.stdout || '') + (e.stderr || '')
+    if (out.includes('nothing to commit')) {
       return 'Nothing to commit'
     }
     throw e

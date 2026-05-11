@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { api } from './lib/api'
 import Sidebar from './components/Sidebar'
 import FrontmatterBar from './components/FrontmatterBar'

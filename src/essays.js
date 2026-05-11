@@ -10,7 +10,7 @@ const contentDir = () => {
 
 function assertSafe(...parts) {
   for (const p of parts) {
-    if (typeof p !== 'string' || p.includes('..') || path.isAbsolute(p)) {
+    if (typeof p !== 'string' || p.includes('..') || p.includes('/') || p.includes('\\') || path.isAbsolute(p)) {
       throw new Error(`Invalid path component: ${p}`)
     }
   }

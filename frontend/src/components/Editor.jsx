@@ -64,6 +64,11 @@ export default function Editor({ folder, slug, initialBody, frontmatterRef, body
     if (s === 'saved') setLastSaved(Date.now())
   }
 
+  useEffect(() => {
+    setSaveStatus('idle')
+    setLastSaved(null)
+  }, [folder, slug])
+
   return (
     <div className="flex-1 overflow-y-auto relative">
       <MilkdownProvider key={`${folder}/${slug}`}>
