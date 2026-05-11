@@ -1,21 +1,27 @@
-const fs = require('fs')
-const path = require('path')
+import fs from 'fs'
+import path from 'path'
 
-const contentDir = () => {
+function contentDir(): string {
   const d = process.env.CONTENT_DIR
   if (!d) throw new Error('CONTENT_DIR env var is not set')
   return d
 }
 
-function assertSafe(...parts) {
+function assertSafe(...parts: string[]): void {
   for (const p of parts) {
-    if (typeof p !== 'string' || p.includes('..') || p.includes('/') || p.includes('\\') || path.isAbsolute(p)) {
+    if (
+      typeof p !== 'string' ||
+      p.includes('..') ||
+      p.includes('/') ||
+      p.includes('\\') ||
+      path.isAbsolute(p)
+    ) {
       throw new Error(`Invalid path component: ${p}`)
     }
   }
 }
 
-function listFolders() {
+export function listFolders(): string[] {
   const dir = contentDir()
   if (!fs.existsSync(dir)) return []
   return fs.readdirSync(dir, { withFileTypes: true })
@@ -23,14 +29,14 @@ function listFolders() {
     .map(d => d.name)
 }
 
-function createFolder(name) {
+export function createFolder(name: string): void {
   assertSafe(name)
   const fp = path.join(contentDir(), name)
   if (fs.existsSync(fp)) throw new Error('Folder already exists')
   fs.mkdirSync(fp, { recursive: true })
 }
 
-function renameFolder(oldName, newName) {
+export function renameFolder(oldName: string, newName: string): void {
   assertSafe(oldName, newName)
   const src = path.join(contentDir(), oldName)
   const dest = path.join(contentDir(), newName)
@@ -39,7 +45,7 @@ function renameFolder(oldName, newName) {
   fs.renameSync(src, dest)
 }
 
-function deleteFolder(name) {
+export function deleteFolder(name: string): void {
   assertSafe(name)
   const fp = path.join(contentDir(), name)
   if (!fs.existsSync(fp)) throw new Error('Not found')
@@ -47,5 +53,3 @@ function deleteFolder(name) {
   if (files.length > 0) throw new Error('Folder is not empty')
   fs.rmdirSync(fp)
 }
-
-module.exports = { listFolders, createFolder, renameFolder, deleteFolder }
