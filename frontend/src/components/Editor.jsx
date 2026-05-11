@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Editor as MilkdownEditor, rootCtx, defaultValueCtx } from '@milkdown/core'
-import { nord } from '@milkdown/theme-nord'
 import { commonmark } from '@milkdown/preset-commonmark'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react'
@@ -12,7 +11,6 @@ function InnerEditor({ folder, slug, initialBody, frontmatterRef, bodyRef, onSav
 
   const { get } = useEditor((root) =>
     MilkdownEditor.make()
-      .config(nord)
       .config((ctx) => {
         ctx.set(rootCtx, root)
         ctx.set(defaultValueCtx, initialBody)
@@ -49,7 +47,7 @@ function SaveStatus({ status, lastSaved }) {
   }[status] || ''
 
   return (
-    <div className="absolute bottom-4 right-6 text-[11px] text-[#444] pointer-events-none">
+    <div className="absolute bottom-4 right-6 text-[11px] text-[#c4bfb9] pointer-events-none">
       {text}
     </div>
   )

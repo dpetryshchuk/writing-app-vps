@@ -2,42 +2,94 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Dark background */
 html, body, #root {
-  background: #0f0f0f;
-  color: #ccc;
+  background: #ffffff;
+  color: #1a1916;
   height: 100%;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Milkdown dark overrides */
+/* Milkdown light overrides */
 .milkdown {
   background: transparent !important;
   box-shadow: none !important;
   padding: 0 !important;
 }
 .milkdown .editor {
-  font-family: Georgia, serif;
-  font-size: 15px;
-  line-height: 1.8;
-  color: #ccc;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 16px;
+  line-height: 1.85;
+  color: #292524;
   background: transparent;
-  padding: 28px 40px;
+  padding: 48px 56px;
+  max-width: 720px;
   min-height: 100%;
   outline: none;
 }
-.milkdown .editor h1,
-.milkdown .editor h2,
-.milkdown .editor h3 {
-  color: #fff;
+.milkdown .editor h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: 21px;
+  font-weight: 600;
+  color: #1a1916;
+  margin: 1.8em 0 0.5em;
+  letter-spacing: -0.01em;
 }
-.milkdown .editor a { color: #7ea; }
-.milkdown .editor code { background: #1e1e1e; padding: 2px 5px; border-radius: 3px; font-size: 13px; }
-.milkdown .editor pre { background: #1a1a1a; border-radius: 6px; padding: 14px 18px; }
+.milkdown .editor h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1916;
+  margin: 1.5em 0 0.4em;
+}
+.milkdown .editor h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #44403c;
+  margin: 1.3em 0 0.3em;
+}
+.milkdown .editor p { margin: 0 0 1em; }
+.milkdown .editor a { color: #2563eb; text-decoration: underline; }
+.milkdown .editor strong { color: #1a1916; font-weight: 600; }
+.milkdown .editor em { color: #44403c; }
+.milkdown .editor code {
+  background: #f0ede8;
+  color: #6d28d9;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+.milkdown .editor pre {
+  background: #f7f6f3;
+  border: 1px solid #e8e5e0;
+  border-radius: 6px;
+  padding: 16px 20px;
+  margin-bottom: 1em;
+}
+.milkdown .editor pre code {
+  background: transparent;
+  color: #374151;
+  padding: 0;
+  font-size: 13px;
+}
 .milkdown .editor blockquote {
-  border-left: 3px solid #333;
+  border-left: 2px solid #d6d3d1;
   margin-left: 0;
-  padding-left: 16px;
-  color: #777;
+  padding-left: 20px;
+  color: #78716c;
+  font-style: italic;
+}
+.milkdown .editor ul, .milkdown .editor ol {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+.milkdown .editor li { margin-bottom: 0.25em; }
+.milkdown .editor hr {
+  border: none;
+  border-top: 1px solid #e8e5e0;
+  margin: 2em 0;
 }

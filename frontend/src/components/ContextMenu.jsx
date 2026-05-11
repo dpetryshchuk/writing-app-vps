@@ -14,14 +14,14 @@ export default function ContextMenu({ x, y, items, onClose }) {
   return (
     <div
       ref={ref}
-      className="fixed z-50 bg-[#1e1e1e] border border-[#2a2a2a] rounded shadow-xl py-1 min-w-[140px]"
+      className="fixed z-50 bg-white border border-[#e8e5e0] rounded-lg shadow-lg py-1 min-w-[148px]"
       style={{ top: y, left: x }}
     >
       {items.map((item) => (
         <button
           key={item.label}
           onClick={() => { item.action(); onClose() }}
-          className="block w-full text-left px-3 py-1.5 text-xs text-[#ccc] hover:bg-[#2a2a2a] hover:text-white"
+          className="block w-full text-left px-3 py-1.5 text-[12.5px] text-[#44403c] hover:bg-[#f7f6f3] transition-colors"
         >
           {item.label}
         </button>

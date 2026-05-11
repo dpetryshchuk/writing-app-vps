@@ -124,7 +124,7 @@ export default function App() {
         onCommitMessageChange={setCommitMessage}
         onPush={handlePush}
       />
-      <div className="flex-1 flex flex-col overflow-hidden bg-[#0f0f0f]">
+      <div className="flex-1 flex flex-col overflow-hidden bg-white">
         {essay ? (
           <>
             <FrontmatterBar
@@ -140,7 +140,7 @@ export default function App() {
             />
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center text-[#333] text-sm">
+          <div className="flex-1 flex items-center justify-center text-[#c4bfb9] text-sm">
             Select an essay or create a new one
           </div>
         )}

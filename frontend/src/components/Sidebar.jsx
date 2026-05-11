@@ -20,9 +20,9 @@ export default function Sidebar({
 }) {
   const [collapsed, setCollapsed] = useState({})
   const [contextMenu, setContextMenu] = useState(null)
-  const [inlineNew, setInlineNew] = useState(null) // { folder }
+  const [inlineNew, setInlineNew] = useState(null)
   const [newTitle, setNewTitle] = useState('')
-  const [renaming, setRenaming] = useState(null) // { folder }
+  const [renaming, setRenaming] = useState(null)
   const [renameValue, setRenameValue] = useState('')
   const [newFolderMode, setNewFolderMode] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
@@ -83,22 +83,26 @@ export default function Sidebar({
   }
 
   return (
-    <div className="w-[210px] bg-[#141414] border-r border-[#222] flex flex-col flex-shrink-0 select-none">
+    <div className="w-[220px] bg-[#f7f6f3] border-r border-[#e8e5e0] flex flex-col flex-shrink-0 select-none">
       {/* Header */}
-      <div className="px-3 py-3 border-b border-[#1e1e1e] flex items-center justify-between">
-        <span className="text-[11px] tracking-widest text-[#555] font-semibold uppercase">Essays</span>
-        <div className="flex gap-2 items-center">
-          <button onClick={onPull} title="Pull from GitHub" className="text-[#444] hover:text-[#888] text-sm leading-none">↓</button>
+      <div className="px-4 py-3.5 border-b border-[#e8e5e0] flex items-center justify-between">
+        <span className="text-[10px] tracking-[0.1em] text-[#a8a29e] font-semibold uppercase">Essays</span>
+        <div className="flex gap-2.5 items-center">
+          <button
+            onClick={onPull}
+            title="Pull from GitHub"
+            className="text-[#c4bfb9] hover:text-[#78716c] text-sm leading-none transition-colors"
+          >↓</button>
           <button
             onClick={() => { setNewFolderMode(true); setNewFolderName('') }}
             title="New folder"
-            className="text-[#444] hover:text-[#888] text-base leading-none"
+            className="text-[#c4bfb9] hover:text-[#78716c] text-base leading-none transition-colors"
           >+</button>
         </div>
       </div>
 
       {/* Folder list */}
-      <div className="flex-1 overflow-y-auto py-1.5">
+      <div className="flex-1 overflow-y-auto py-2">
         {newFolderMode && (
           <input
             autoFocus
@@ -107,7 +111,7 @@ export default function Sidebar({
             onKeyDown={e => { if (e.key === 'Enter') submitNewFolder(); if (e.key === 'Escape') setNewFolderMode(false) }}
             onBlur={() => setNewFolderMode(false)}
             placeholder="folder name"
-            className="mx-2 mb-1 w-[calc(100%-16px)] bg-[#1a1a1a] border border-[#333] rounded px-2 py-1 text-xs text-white outline-none"
+            className="mx-3 mb-1 w-[calc(100%-24px)] bg-white border border-[#e8e5e0] rounded-md px-2.5 py-1.5 text-xs text-[#1a1916] outline-none focus:border-[#a8a29e]"
           />
         )}
         {folders.map(folder => {
@@ -116,11 +120,11 @@ export default function Sidebar({
           return (
             <div key={folder}>
               <div
-                className="px-2.5 py-1.5 flex items-center gap-1.5 cursor-pointer group"
+                className="px-3 py-1.5 flex items-center gap-1.5 cursor-pointer group"
                 onClick={() => setCollapsed(c => ({ ...c, [folder]: !c[folder] }))}
                 onContextMenu={e => handleFolderCtx(e, folder)}
               >
-                <span className="text-[10px] text-[#555]">{isOpen ? '▾' : '▸'}</span>
+                <span className="text-[9px] text-[#c4bfb9] w-3 flex-shrink-0">{isOpen ? '▾' : '▸'}</span>
                 {renaming?.folder === folder ? (
                   <input
                     autoFocus
@@ -129,14 +133,14 @@ export default function Sidebar({
                     onKeyDown={e => { if (e.key === 'Enter') submitRename(folder); if (e.key === 'Escape') setRenaming(null) }}
                     onBlur={() => submitRename(folder)}
                     onClick={e => e.stopPropagation()}
-                    className="flex-1 bg-[#1a1a1a] border border-[#333] rounded px-1 py-0 text-xs text-white outline-none"
+                    className="flex-1 bg-white border border-[#e8e5e0] rounded px-1.5 py-0.5 text-xs text-[#1a1916] outline-none"
                   />
                 ) : (
-                  <span className="text-xs text-[#888] group-hover:text-[#aaa] flex-1">{folder}</span>
+                  <span className="text-xs text-[#736d65] group-hover:text-[#1a1916] flex-1 font-medium transition-colors">{folder}</span>
                 )}
                 <button
                   onClick={e => { e.stopPropagation(); setInlineNew({ folder }); setNewTitle('') }}
-                  className="text-[#333] hover:text-[#666] text-[10px] leading-none"
+                  className="text-[#c4bfb9] hover:text-[#78716c] text-xs leading-none opacity-0 group-hover:opacity-100 transition-opacity"
                 >+</button>
               </div>
               {isOpen && (
@@ -144,10 +148,10 @@ export default function Sidebar({
                   {folderEssays.map(essay => (
                     <div
                       key={essay.slug}
-                      className={`pl-[26px] pr-3 py-1.5 text-xs cursor-pointer ${
+                      className={`pl-7 pr-3 py-1.5 text-[12.5px] cursor-pointer transition-colors ${
                         activeFolder === essay.folder && activeSlug === essay.slug
-                          ? 'text-white bg-[#1e1e1e] border-l-2 border-[#666]'
-                          : 'text-[#777] hover:text-[#aaa]'
+                          ? 'text-[#1a1916] bg-white border-l-2 border-[#a8a29e] font-medium'
+                          : 'text-[#9c9590] hover:text-[#1a1916] hover:bg-[#f0ede8]'
                       }`}
                       onClick={() => onSelectEssay(essay.folder, essay.slug)}
                       onContextMenu={e => handleEssayCtx(e, essay)}
@@ -163,7 +167,7 @@ export default function Sidebar({
                       onKeyDown={e => { if (e.key === 'Enter') submitNewEssay(folder); if (e.key === 'Escape') setInlineNew(null) }}
                       onBlur={() => setInlineNew(null)}
                       placeholder="Essay title…"
-                      className="ml-[26px] mr-2 my-0.5 w-[calc(100%-36px)] bg-[#1a1a1a] border border-[#333] rounded px-2 py-1 text-xs text-white outline-none"
+                      className="ml-7 mr-3 my-0.5 w-[calc(100%-52px)] bg-white border border-[#e8e5e0] rounded px-2 py-1 text-xs text-[#1a1916] outline-none"
                     />
                   )}
                 </div>
@@ -174,16 +178,16 @@ export default function Sidebar({
       </div>
 
       {/* Footer: git push */}
-      <div className="border-t border-[#1e1e1e] p-3">
+      <div className="border-t border-[#e8e5e0] p-3">
         <input
           value={commitMessage}
           onChange={e => onCommitMessageChange(e.target.value)}
           placeholder="commit message…"
-          className="w-full bg-[#1a1a1a] border border-[#2a2a2a] rounded px-2 py-1.5 text-[11px] text-[#777] font-mono outline-none focus:border-[#444] mb-2"
+          className="w-full bg-white border border-[#e8e5e0] rounded-md px-2.5 py-1.5 text-[11.5px] text-[#736d65] font-mono outline-none focus:border-[#a8a29e] mb-2 transition-colors placeholder-[#c4bfb9]"
         />
         <button
           onClick={onPush}
-          className="w-full bg-[#2a2a2a] hover:bg-[#333] border-none rounded px-2 py-1.5 text-[#aaa] text-[11px] tracking-wide cursor-pointer"
+          className="w-full bg-[#1a1916] hover:bg-[#292524] text-white rounded-md px-2 py-1.5 text-[11.5px] font-medium tracking-wide cursor-pointer transition-colors"
         >
           ↑ Push to GitHub
         </button>
