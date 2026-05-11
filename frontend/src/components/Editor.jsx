@@ -7,7 +7,7 @@ import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react'
 import { api } from '../lib/api'
 
 // Inner component — lives inside MilkdownProvider
-function InnerEditor({ folder, slug, initialBody, frontmatterRef, onSaveStatus }) {
+function InnerEditor({ folder, slug, initialBody, frontmatterRef, bodyRef, onSaveStatus }) {
   const saveTimer = useRef(null)
 
   const { get } = useEditor((root) =>
@@ -23,6 +23,7 @@ function InnerEditor({ folder, slug, initialBody, frontmatterRef, onSaveStatus }
             try {
               onSaveStatus('saving')
               await api.essays.write(folder, slug, frontmatterRef.current, markdown)
+              if (bodyRef) bodyRef.current = markdown
               onSaveStatus('saved')
             } catch (e) {
               onSaveStatus('error')
@@ -54,7 +55,7 @@ function SaveStatus({ status, lastSaved }) {
   )
 }
 
-export default function Editor({ folder, slug, initialBody, frontmatterRef }) {
+export default function Editor({ folder, slug, initialBody, frontmatterRef, bodyRef }) {
   const [saveStatus, setSaveStatus] = useState('idle')
   const [lastSaved, setLastSaved] = useState(null)
 
@@ -71,6 +72,7 @@ export default function Editor({ folder, slug, initialBody, frontmatterRef }) {
           slug={slug}
           initialBody={initialBody}
           frontmatterRef={frontmatterRef}
+          bodyRef={bodyRef}
           onSaveStatus={handleSaveStatus}
         />
       </MilkdownProvider>

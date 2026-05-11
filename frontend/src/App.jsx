@@ -12,6 +12,7 @@ export default function App() {
   const [essay, setEssay] = useState(null) // { frontmatter, body }
   const [commitMessage, setCommitMessage] = useState('')
   const frontmatterRef = useRef(null)
+  const bodyRef = useRef('')
 
   async function loadList() {
     const [f, e] = await Promise.all([api.folders.list(), api.essays.list()])
@@ -27,6 +28,7 @@ export default function App() {
     const data = await api.essays.read(folder, slug)
     setEssay({ frontmatter: data.frontmatter, body: data.body })
     frontmatterRef.current = data.frontmatter
+    bodyRef.current = data.body
   }
 
   function handleFrontmatterChange(fm) {
@@ -34,46 +36,56 @@ export default function App() {
     frontmatterRef.current = fm
     // autosave frontmatter immediately on blur-triggered change
     if (activeFolder && activeSlug) {
-      api.essays.write(activeFolder, activeSlug, fm, essay?.body || '')
+      api.essays.write(activeFolder, activeSlug, fm, bodyRef.current)
     }
   }
 
   async function handleCreateEssay(folder, title) {
     const created = await api.essays.create(folder, title)
     await loadList()
-    selectEssay(created.folder, created.slug)
+    await selectEssay(created.folder, created.slug)
   }
 
   async function handleDeleteEssay(folder, slug) {
-    await api.essays.delete(folder, slug)
-    if (activeFolder === folder && activeSlug === slug) {
-      setActiveFolder(null); setActiveSlug(null); setEssay(null)
-    }
-    await loadList()
+    try {
+      await api.essays.delete(folder, slug)
+      if (activeFolder === folder && activeSlug === slug) {
+        setActiveFolder(null); setActiveSlug(null); setEssay(null)
+      }
+      await loadList()
+    } catch (e) { alert(`Delete failed: ${e.message}`) }
   }
 
   async function handleMoveEssay(folder, slug, targetFolder) {
-    await api.essays.move(folder, slug, targetFolder)
-    await loadList()
-    if (activeFolder === folder && activeSlug === slug) {
-      setActiveFolder(targetFolder)
-    }
+    try {
+      await api.essays.move(folder, slug, targetFolder)
+      await loadList()
+      if (activeFolder === folder && activeSlug === slug) {
+        setActiveFolder(targetFolder)
+      }
+    } catch (e) { alert(`Move failed: ${e.message}`) }
   }
 
   async function handleCreateFolder(name) {
-    await api.folders.create(name)
-    await loadList()
+    try {
+      await api.folders.create(name)
+      await loadList()
+    } catch (e) { alert(`Create folder failed: ${e.message}`) }
   }
 
   async function handleRenameFolder(oldName, newName) {
-    await api.folders.rename(oldName, newName)
-    if (activeFolder === oldName) setActiveFolder(newName)
-    await loadList()
+    try {
+      await api.folders.rename(oldName, newName)
+      if (activeFolder === oldName) setActiveFolder(newName)
+      await loadList()
+    } catch (e) { alert(`Rename failed: ${e.message}`) }
   }
 
   async function handleDeleteFolder(name) {
-    await api.folders.delete(name)
-    await loadList()
+    try {
+      await api.folders.delete(name)
+      await loadList()
+    } catch (e) { alert(`Delete folder failed: ${e.message}`) }
   }
 
   async function handlePull() {
@@ -124,6 +136,7 @@ export default function App() {
               slug={activeSlug}
               initialBody={essay.body}
               frontmatterRef={frontmatterRef}
+              bodyRef={bodyRef}
             />
           </>
         ) : (
