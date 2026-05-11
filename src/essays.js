@@ -2,7 +2,19 @@ const fs = require('fs')
 const path = require('path')
 const matter = require('gray-matter')
 
-const contentDir = () => process.env.CONTENT_DIR
+const contentDir = () => {
+  const d = process.env.CONTENT_DIR
+  if (!d) throw new Error('CONTENT_DIR env var is not set')
+  return d
+}
+
+function assertSafe(...parts) {
+  for (const p of parts) {
+    if (typeof p !== 'string' || p.includes('..') || path.isAbsolute(p)) {
+      throw new Error(`Invalid path component: ${p}`)
+    }
+  }
+}
 
 function slugify(title) {
   return title.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-')
@@ -23,16 +35,21 @@ function listEssays() {
     const folderPath = path.join(dir, folder)
     const files = fs.readdirSync(folderPath).filter(f => f.endsWith('.md'))
     for (const file of files) {
-      const slug = file.replace(/\.md$/, '')
-      const raw = fs.readFileSync(path.join(folderPath, file), 'utf8')
-      const { data } = matter(raw)
-      essays.push({ folder, slug, ...data })
+      try {
+        const slug = file.replace(/\.md$/, '')
+        const raw = fs.readFileSync(path.join(folderPath, file), 'utf8')
+        const { data } = matter(raw)
+        essays.push({ folder, slug, ...data })
+      } catch (e) {
+        // skip corrupt file
+      }
     }
   }
   return essays
 }
 
 function readEssay(folder, slug) {
+  assertSafe(folder, slug)
   const fp = essayPath(folder, slug)
   if (!fs.existsSync(fp)) return null
   const raw = fs.readFileSync(fp, 'utf8')
@@ -41,12 +58,16 @@ function readEssay(folder, slug) {
 }
 
 function writeEssay(folder, slug, frontmatter, body) {
+  assertSafe(folder, slug)
+  const dir = path.join(contentDir(), folder)
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
   const fp = essayPath(folder, slug)
   const raw = matter.stringify(body, frontmatter)
   fs.writeFileSync(fp, raw, 'utf8')
 }
 
 function createEssay(folder, title) {
+  assertSafe(folder)
   const slug = slugify(title)
   const dir = path.join(contentDir(), folder)
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
@@ -64,12 +85,14 @@ function createEssay(folder, title) {
 }
 
 function deleteEssay(folder, slug) {
+  assertSafe(folder, slug)
   const fp = essayPath(folder, slug)
   if (!fs.existsSync(fp)) throw new Error('Not found')
   fs.unlinkSync(fp)
 }
 
 function moveEssay(folder, slug, targetFolder) {
+  assertSafe(folder, slug, targetFolder)
   const src = essayPath(folder, slug)
   if (!fs.existsSync(src)) throw new Error('Not found')
   const targetDir = path.join(contentDir(), targetFolder)
