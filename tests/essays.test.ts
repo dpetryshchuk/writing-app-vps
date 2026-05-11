@@ -76,6 +76,27 @@ describe('listEssays', () => {
     expect(folders).toContain('drafts')
     expect(folders).toContain('published')
   })
+
+  it('returns essays sorted alphabetically by title', () => {
+    const folder = path.join(tmpDir, 'drafts')
+    fs.mkdirSync(folder)
+    fs.writeFileSync(path.join(folder, 'zebra.md'), '---\ntitle: Zebra\n---\n')
+    fs.writeFileSync(path.join(folder, 'apple.md'), '---\ntitle: Apple\n---\n')
+    fs.writeFileSync(path.join(folder, 'mango.md'), '---\ntitle: Mango\n---\n')
+    const result = listEssays()
+    const titles = result.map(e => (e as any).title)
+    expect(titles).toEqual(['Apple', 'Mango', 'Zebra'])
+  })
+
+  it('falls back to slug when title is absent for sorting', () => {
+    const folder = path.join(tmpDir, 'drafts')
+    fs.mkdirSync(folder)
+    fs.writeFileSync(path.join(folder, 'zebra.md'), '---\n---\n')
+    fs.writeFileSync(path.join(folder, 'alpha.md'), '---\n---\n')
+    const result = listEssays()
+    expect(result[0].slug).toBe('alpha')
+    expect(result[1].slug).toBe('zebra')
+  })
 })
 
 // ---------------------------------------------------------------------------

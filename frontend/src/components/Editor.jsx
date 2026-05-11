@@ -4,9 +4,10 @@ import { commonmark } from '@milkdown/preset-commonmark'
 import { listener, listenerCtx } from '@milkdown/plugin-listener'
 import { Milkdown, MilkdownProvider, useEditor } from '@milkdown/react'
 import { api } from '../lib/api'
+import { wikiLinksPlugin } from '../plugins/wikiLinks'
 
 // Inner component — lives inside MilkdownProvider
-function InnerEditor({ folder, slug, initialBody, frontmatterRef, bodyRef, onSaveStatus }) {
+function InnerEditor({ folder, slug, initialBody, frontmatterRef, bodyRef, onSaveStatus, essays, onSelectEssay }) {
   const saveTimer = useRef(null)
 
   const { get } = useEditor((root) =>
@@ -31,6 +32,7 @@ function InnerEditor({ folder, slug, initialBody, frontmatterRef, bodyRef, onSav
       })
       .use(commonmark)
       .use(listener)
+      .use(wikiLinksPlugin)
   )
 
   return <Milkdown />
@@ -53,7 +55,7 @@ function SaveStatus({ status, lastSaved }) {
   )
 }
 
-export default function Editor({ folder, slug, initialBody, frontmatterRef, bodyRef }) {
+export default function Editor({ folder, slug, initialBody, frontmatterRef, bodyRef, essays, onSelectEssay }) {
   const [saveStatus, setSaveStatus] = useState('idle')
   const [lastSaved, setLastSaved] = useState(null)
 
@@ -67,8 +69,18 @@ export default function Editor({ folder, slug, initialBody, frontmatterRef, body
     setLastSaved(null)
   }, [folder, slug])
 
+  function handleWikiClick(e) {
+    const el = e.target.closest('[data-wiki]')
+    if (!el) return
+    const title = el.dataset.wiki
+    const match = essays?.find(es =>
+      String(es.title ?? es.slug).toLowerCase() === title.toLowerCase()
+    )
+    if (match) onSelectEssay?.(match.folder, match.slug)
+  }
+
   return (
-    <div className="flex-1 overflow-y-auto relative">
+    <div className="flex-1 overflow-y-auto relative" onClick={handleWikiClick}>
       <MilkdownProvider key={`${folder}/${slug}`}>
         <InnerEditor
           folder={folder}
@@ -77,6 +89,8 @@ export default function Editor({ folder, slug, initialBody, frontmatterRef, body
           frontmatterRef={frontmatterRef}
           bodyRef={bodyRef}
           onSaveStatus={handleSaveStatus}
+          essays={essays}
+          onSelectEssay={onSelectEssay}
         />
       </MilkdownProvider>
       <SaveStatus status={saveStatus} lastSaved={lastSaved} />

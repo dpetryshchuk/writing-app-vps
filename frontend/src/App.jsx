@@ -137,6 +137,8 @@ export default function App() {
               initialBody={essay.body}
               frontmatterRef={frontmatterRef}
               bodyRef={bodyRef}
+              essays={essays}
+              onSelectEssay={selectEssay}
             />
           </>
         ) : (

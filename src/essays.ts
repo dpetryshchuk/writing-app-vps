@@ -52,7 +52,11 @@ export function listEssays(): EssayMeta[] {
       }
     }
   }
-  return essays
+  return essays.sort((a, b) => {
+    const ta = String((a as any).title ?? a.slug)
+    const tb = String((b as any).title ?? b.slug)
+    return ta.localeCompare(tb, undefined, { sensitivity: 'base' })
+  })
 }
 
 export function readEssay(folder: string, slug: string): Essay | null {

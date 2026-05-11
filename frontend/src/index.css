@@ -53,6 +53,17 @@ html, body, #root {
 }
 .milkdown .editor p { margin: 0 0 1em; }
 .milkdown .editor a { color: #2563eb; text-decoration: underline; }
+.wiki-link {
+  color: #7c6f64;
+  background: #f0ede8;
+  border-radius: 3px;
+  padding: 1px 4px;
+  cursor: pointer;
+  font-style: italic;
+  text-decoration: none;
+  transition: background 0.1s;
+}
+.wiki-link:hover { background: #e8e5e0; color: #44403c; }
 .milkdown .editor strong { color: #1a1916; font-weight: 600; }
 .milkdown .editor em { color: #44403c; }
 .milkdown .editor code {
