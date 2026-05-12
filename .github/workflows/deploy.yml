@@ -18,4 +18,4 @@ jobs:
             cd /home/dima/writing-app
             git pull
             npm run build
-            systemctl --user restart writing
+            sudo systemctl restart writing
