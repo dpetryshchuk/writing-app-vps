@@ -33,7 +33,7 @@ Everything needed to add a new web app to the server.
 | jobsearch CRM | 4111 | `jobsearch.dmytropetryshchuk.com` | `jobsearch` | `/home/dima/jobsearch` |
 | writing app | 4112 | `write.dmytropetryshchuk.com` | `writing` | `/home/dima/writing-app` |
 
-**Next available port:** 4113
+**Next available port:** 4114
 
 ---
 
@@ -256,4 +256,5 @@ sudo apt install -y nodejs
 |---|---|
 | 4111 | jobsearch |
 | 4112 | writing-app |
-| 4113 | next available |
+| 4113 | daily-log |
+| 4114 | next available |
