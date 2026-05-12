@@ -44,7 +44,7 @@ function SaveStatus({ status, lastSaved }) {
   return <span className="text-[11px] text-[#c4bfb9]">{text}</span>
 }
 
-export default function Editor({ folder, slug, initialBody, frontmatterRef, bodyRef, essays, onSelectEssay }) {
+export default function Editor({ folder, slug, initialBody, frontmatterRef, bodyRef, essays, onSelectEssay, onCreateEssay }) {
   const containerRef = useRef(null)
   const saveTimerRef = useRef(null)
   const [saveStatus, setSaveStatus] = useState('idle')
@@ -110,7 +110,11 @@ export default function Editor({ folder, slug, initialBody, frontmatterRef, body
     const match = essays?.find(es =>
       String(es.title ?? es.slug).toLowerCase() === title.toLowerCase()
     )
-    if (match) onSelectEssay?.(match.folder, match.slug)
+    if (match) {
+      onSelectEssay?.(match.folder, match.slug)
+    } else {
+      onCreateEssay?.(folder, title)
+    }
   }
 
   const effectiveMode = narrow && mode === 'split' ? 'edit' : mode

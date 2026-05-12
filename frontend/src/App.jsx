@@ -139,6 +139,7 @@ export default function App() {
               bodyRef={bodyRef}
               essays={essays}
               onSelectEssay={selectEssay}
+              onCreateEssay={handleCreateEssay}
             />
           </>
         ) : (
