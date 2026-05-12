@@ -23,9 +23,9 @@ export default function App() {
   useEffect(() => { loadList() }, [])
 
   async function selectEssay(folder, slug) {
+    const data = await api.essays.read(folder, slug)
     setActiveFolder(folder)
     setActiveSlug(slug)
-    const data = await api.essays.read(folder, slug)
     setEssay({ frontmatter: data.frontmatter, body: data.body })
     frontmatterRef.current = data.frontmatter
     bodyRef.current = data.body
