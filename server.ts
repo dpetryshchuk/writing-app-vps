@@ -7,7 +7,7 @@ import { gitPull, gitPush } from './src/git'
 
 const app = express()
 app.use(express.json())
-app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '..', 'public')))
 
 function ok(res: Response, data: object = {}): void {
   res.json({ ok: true, ...data })
@@ -86,7 +86,7 @@ app.post('/api/git/push', (req: Request, res: Response) => {
 
 // SPA fallback
 app.get('*', (_req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
 })
 
 export { app }
